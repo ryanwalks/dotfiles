@@ -1,4 +1,4 @@
-# [Cătălin](https://github.com/alrra)’s dotfiles
+# [RyanWalks, (designed by Cătălin)](https://github.com/ryanwalks)’s dotfiles
 
 These are the base dotfiles that I start with when I set up a
 new environment. For more specific local needs I use the `.local`
@@ -219,7 +219,6 @@ The code is available under the [MIT license][license].
 [dotfiles mathias]: https://github.com/mathiasbynens/dotfiles
 [github mathias ]: https://github.com/mathiasbynens
 [license]: LICENSE.txt
-[setup line]: https://github.com/alrra/dotfiles/blob/1503cf23ef23f6e31342b140bcd246625160b94f/src/os/setup.sh#L3
 [setup]: src/os/setup.sh
 [shell]: src/shell
 [symlink]: src/os/create_symbolic_links.sh
