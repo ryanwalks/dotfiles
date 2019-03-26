@@ -1,6 +1,7 @@
 #!/bin/bash
 
-declare -r GITHUB_REPOSITORY="alrra/dotfiles"
+declare -r GITHUB_USER="ryanwalks"
+declare -r GITHUB_REPOSITORY="$GITHUB_USER/dotfiles"
 
 declare -r DOTFILES_ORIGIN="git@github.com:$GITHUB_REPOSITORY.git"
 declare -r DOTFILES_TARBALL_URL="https://github.com/$GITHUB_REPOSITORY/tarball/master"
@@ -93,10 +94,10 @@ download_dotfiles() {
 
         rm -rf "$dotfilesDirectory" &> /dev/null
 
-    fi
+            fi
 
-    mkdir -p "$dotfilesDirectory"
-    print_result $? "Create '$dotfilesDirectory'" "true"
+            mkdir -p "$dotfilesDirectory"
+            print_result $? "Create '$dotfilesDirectory'" "true"
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -115,7 +116,7 @@ download_dotfiles() {
     cd "$dotfilesDirectory/src/os" \
         || return 1
 
-}
+    }
 
 download_utils() {
 
@@ -128,7 +129,7 @@ download_utils() {
         && rm -rf "$tmpFile" \
         && return 0
 
-   return 1
+    return 1
 
 }
 
@@ -150,8 +151,10 @@ verify_os() {
 
     declare -r MINIMUM_MACOS_VERSION="10.10"
     declare -r MINIMUM_UBUNTU_VERSION="14.04"
+    declare -r MINIMUM_FEDORA_VERSION="29"
 
     local os_name=""
+    local os_distribution=""
     local os_version=""
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -176,25 +179,37 @@ verify_os() {
     # Check if the OS is `Ubuntu` and
     # it's above the required version.
 
-    elif [ "$os_name" == "Linux" ] && [ -e "/etc/lsb-release" ]; then
+elif [ "$os_name" == "Linux" ] && [ -e "/etc/os-release" ]; then
 
-        os_version="$(lsb_release -r | cut -f2)"
+    os_distribution="$(cat /etc/os-release | grep '^ID=' | grep -o '[a-z]*')"
+    os_version="$(cat /etc/os-release | grep '^VERSON_ID=' | grep -o '[0-9]\.')"
+
+    if [ "$os_distribution" == "fedora" ]; then
+
+        if is_supported_version "$os_version" "$MINIMUM_FEDORA_VERSION"; then
+            return 0
+        fi
+
+    elif [ "$os_distribution" == "ubuntu" ]; then
 
         if is_supported_version "$os_version" "$MINIMUM_UBUNTU_VERSION"; then
             return 0
-        else
-            printf "Sorry, this script is intended only for Ubuntu %s+" "$MINIMUM_UBUNTU_VERSION"
+        fi
+
+    else
+        printf "Sorry, this script is intended only for Ubuntu %s+, or Fedora %s"
+        "$MINIMUM_UBUNTU_VERSION" "$MINIMUM_FEDORA_VERSION"
         fi
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    else
-        printf "Sorry, this script is intended only for macOS and Ubuntu!"
-    fi
+else
+    printf "Sorry, this script is intended only for macOS and Linux (Ubutu and Fedora) systems!"
+        fi
 
-    return 1
+        return 1
 
-}
+    }
 
 # ----------------------------------------------------------------------
 # | Main                                                               |
@@ -278,7 +293,7 @@ main() {
             ./update_content.sh
         fi
 
-    fi
+        fi
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
