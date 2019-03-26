@@ -46,7 +46,7 @@ install_package() {
     declare -r PACKAGE_READABLE_NAME="$1"
 
     if ! package_is_installed "$PACKAGE"; then
-        execute "sudo dnf -y install $PACKAGE"
+        execute "echo "no-sudo dnf -y install $PACKAGE""
     else
         print_success "$PACKAGE_READABLE_NAME"
     fi
@@ -71,5 +71,5 @@ upgrade() {
     # Install the newest versions of all packages installed.
 
     execute \
-         "sudo dnf -y distro-sync"
+         "echo "no-sudo dnf -y distro-sync""
 }
