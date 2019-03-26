@@ -7,6 +7,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")" \
 
 add_key() {
 
+    echo "add_key()"
+
     #wget -qO - "$1" | sudo apt-key add - &> /dev/null
     #     │└─ write output to file
     #     └─ don't show output
@@ -14,10 +16,16 @@ add_key() {
 }
 
 add_ppa() {
-    #sudo add-apt-repository -y ppa:"$1" &> /dev/null
+
+    echo "add_ppa()"
+
+#sudo add-apt-repository -y ppa:"$1" &> /dev/null
 }
 
+
 add_to_source_list() {
+
+    echo "add_to_source_list()"
     #sudo sh -c "printf 'deb $1' >> '/etc/apt/sources.list.d/$2'"
 }
 
