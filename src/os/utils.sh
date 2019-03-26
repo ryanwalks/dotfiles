@@ -4,7 +4,7 @@ answer_is_yes() {
     [[ "$REPLY" =~ ^[Yy]$ ]] \
         && return 0 \
         || return 1
-}
+    }
 
 ask() {
     print_question "$1"
@@ -118,6 +118,7 @@ get_os() {
 
     local os=""
     local kernelName=""
+    local distribution=""
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -125,15 +126,20 @@ get_os() {
 
     if [ "$kernelName" == "Darwin" ]; then
         os="macos"
-    elif [ "$kernelName" == "Linux" ] && [ -e "/etc/lsb-release" ]; then
-        os="ubuntu"
+    elif [ "$kernelName" == "Linux" ] && [ -e "/etc/os-release" ]; then
+
+        distribution="$(cat /etc/os-release | grep '^ID=' | grep -o '[a-z]*')"
+
+        if [ "$distribution" == "fedora" ] || [ "$distribution" == "ubuntu" ]; then
+            os="ubuntu"
+        fi
     else
         os="$kernelName"
-    fi
+        fi
 
-    printf "%s" "$os"
+        printf "%s" "$os"
 
-}
+    }
 
 get_os_version() {
 
@@ -197,13 +203,13 @@ mkd() {
             fi
         else
             execute "mkdir -p $1" "$1"
-        fi
-    fi
-}
+            fi
+            fi
+        }
 
-print_error() {
-    print_in_red "   [✖] $1 $2\n"
-}
+    print_error() {
+        print_in_red "   [✖] $1 $2\n"
+    }
 
 print_error_stream() {
     while read -r line; do
@@ -216,7 +222,7 @@ print_in_color() {
         "$(tput setaf "$2" 2> /dev/null)" \
         "$1" \
         "$(tput sgr0 2> /dev/null)"
-}
+    }
 
 print_in_green() {
     print_in_color "$1" 2
@@ -263,14 +269,14 @@ set_trap() {
     trap -p "$1" | grep "$2" &> /dev/null \
         || trap '$2' "$1"
 
-}
+    }
 
 skip_questions() {
 
-     while :; do
+    while :; do
         case $1 in
             -y|--yes) return 0;;
-                   *) break;;
+            *) break;;
         esac
         shift 1
     done
