@@ -182,7 +182,7 @@ verify_os() {
 elif [ "$os_name" == "Linux" ] && [ -e "/etc/os-release" ]; then
 
     os_distribution="$(cat /etc/os-release | grep '^ID=' | grep -o '[a-z]*')"
-    os_version="$(cat /etc/os-release | grep '^VERSON_ID=' | grep -o '[0-9]\.')"
+    os_version="$(cat /etc/os-release | grep '^VERSION_ID=' | grep -o '[0-9\.]*')"
 
     if [ "$os_distribution" == "fedora" ]; then
 
