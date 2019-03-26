@@ -35,7 +35,7 @@ autoremove() {
     # dependencies for other packages and are no longer needed.
 
     execute \
-        "sudo dnf clean all"
+        "dnf clean all"
 
 }
 
@@ -62,7 +62,7 @@ update() {
     # Resynchronize the package index files from their sources.
 
     execute \
-        "sudo dnf check-update"
+        "dnf check-update"
 
 }
 
