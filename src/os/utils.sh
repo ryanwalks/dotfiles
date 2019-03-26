@@ -130,7 +130,9 @@ get_os() {
 
         distribution="$(cat /etc/os-release | grep '^ID=' | grep -o '[a-z]*')"
 
-        if [ "$distribution" == "fedora" ] || [ "$distribution" == "ubuntu" ]; then
+        if [ "$distribution" == "fedora" ]; then
+            os="fedora"
+        elif   [ "$distribution" == "ubuntu" ]; then
             os="ubuntu"
         fi
     else
